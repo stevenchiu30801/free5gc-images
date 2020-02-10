@@ -1,21 +1,32 @@
-# Refer to https://github.com/open5gs/open5gs/blob/master/docker/build/Dockerfile
-FROM steven30801/free5gc-base:latest
+FROM golang:1.12.9
 
 MAINTAINER steven30801@gmail.com
 
-COPY setup.sh /root
-RUN chmod 777 /root/setup.sh
+ARG REPO=free5gc-stage-2
 
-ARG REPO=free5gc-stage-1
+RUN apt-get update && \
+    apt-get upgrade -y && \
+    apt-get install -y --no-install-recommends \
+        git \
+        gcc \
+        cmake \
+        autoconf \
+        libtool \
+        pkg-config \
+        libmnl-dev \
+        libyaml-dev \
+        automake && \
+    apt-get clean
 
-RUN cd /usr/src; \
-    git clone https://bitbucket.org/nctu_5g/$REPO.git
+ENV GOROOT=/usr/local/go
+ENV GO111MODULE=off
 
-WORKDIR /usr/src/$REPO
+RUN git clone https://bitbucket.org/free5GC/$REPO.git $GOPATH/src/free5gc
 
-RUN ./support/freeDiameter/make_certs.sh ./support/freeDiameter
+WORKDIR $GOPATH/src/free5gc
 
-RUN autoreconf -iv && \
-    ./configure --prefix=`pwd`/install && \
-    make -j `nproc` && \
-    make install
+RUN ./install_env.sh
+
+RUN tar -C $GOPATH -zxvf free5gc_libs.tar.gz
+
+RUN ./build.sh
