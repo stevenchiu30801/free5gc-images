@@ -1,5 +1,5 @@
 # Refer to https://github.com/open5gs/open5gs/blob/master/docker/build/Dockerfile
-FROM steven30801/free5gc-base:latest
+FROM steven30801/free5gc-base:stage-1
 
 MAINTAINER steven30801@gmail.com
 
