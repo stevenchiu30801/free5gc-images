@@ -3,6 +3,7 @@ FROM golang:1.12.9
 MAINTAINER steven30801@gmail.com
 
 ARG REPO=free5gc-stage-2
+ARG TAG=v2.0.2
 
 RUN apt-get update && \
     apt-get upgrade -y && \
@@ -24,6 +25,8 @@ ENV GO111MODULE=off
 RUN git clone https://bitbucket.org/free5GC/$REPO.git $GOPATH/src/free5gc
 
 WORKDIR $GOPATH/src/free5gc
+
+RUN git checkout $TAG
 
 RUN ./install_env.sh
 
