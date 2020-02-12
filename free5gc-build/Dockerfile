@@ -32,4 +32,6 @@ RUN ./install_env.sh
 
 RUN tar -C $GOPATH -zxvf free5gc_libs.tar.gz
 
+RUN find src/udm -type f -print0 | xargs -0 sed -i "s/Adrr/Addr/g"
+
 RUN ./build.sh
