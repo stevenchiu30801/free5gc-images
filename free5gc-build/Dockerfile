@@ -2,6 +2,9 @@ FROM golang:1.12.9
 
 MAINTAINER steven30801@gmail.com
 
+COPY setup.sh /root
+RUN chmod 777 /root/setup.sh
+
 ARG REPO=free5gc-stage-2
 ARG TAG=v2.0.2
 
@@ -16,7 +19,9 @@ RUN apt-get update && \
         pkg-config \
         libmnl-dev \
         libyaml-dev \
-        automake && \
+        automake \
+        iptables \
+        ethtool && \
     apt-get clean
 
 ENV GOROOT=/usr/local/go
